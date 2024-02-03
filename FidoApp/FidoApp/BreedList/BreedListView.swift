@@ -27,9 +27,8 @@ struct BreedListView: View {
           store.send(.loadMore)
         }
       }
-
+      .navigationTitle("Breeds")
     }
-    .navigationTitle("Breeds")
     .onAppear() {
       store.send(.fetchBreeds(page: store.currentPage, limit: store.itemsPerPage))
     }
