@@ -6,12 +6,19 @@
 //
 
 import SwiftUI
+import ComposableArchitecture
 
 @main
 struct FidoAppApp: App {
+
+  static let store = Store(initialState: BreedListFeature.State()) {
+    BreedListFeature()
+      ._printChanges()
+  }
+
     var body: some Scene {
         WindowGroup {
-            ContentView()
+          BreedListView(store: FidoAppApp.store)
         }
     }
 }

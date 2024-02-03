@@ -7,8 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C232033A2B6EA03100645D8F /* BreedListFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C23203392B6EA03100645D8F /* BreedListFeature.swift */; };
+		C232033F2B6EB13800645D8F /* Breed.swift in Sources */ = {isa = PBXBuildFile; fileRef = C232033E2B6EB13800645D8F /* Breed.swift */; };
 		C2E8C7AE2B6E9251003DE1AE /* FidoAppApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2E8C7AD2B6E9251003DE1AE /* FidoAppApp.swift */; };
-		C2E8C7B02B6E9251003DE1AE /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2E8C7AF2B6E9251003DE1AE /* ContentView.swift */; };
+		C2E8C7B02B6E9251003DE1AE /* BreedListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2E8C7AF2B6E9251003DE1AE /* BreedListView.swift */; };
 		C2E8C7B22B6E9253003DE1AE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C2E8C7B12B6E9253003DE1AE /* Assets.xcassets */; };
 		C2E8C7B52B6E9253003DE1AE /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C2E8C7B42B6E9253003DE1AE /* Preview Assets.xcassets */; };
 		C2E8C7BF2B6E9253003DE1AE /* FidoAppTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2E8C7BE2B6E9253003DE1AE /* FidoAppTests.swift */; };
@@ -35,9 +37,12 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		C23203392B6EA03100645D8F /* BreedListFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreedListFeature.swift; sourceTree = "<group>"; };
+		C232033B2B6EACAA00645D8F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		C232033E2B6EB13800645D8F /* Breed.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Breed.swift; sourceTree = "<group>"; };
 		C2E8C7AA2B6E9251003DE1AE /* FidoApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FidoApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C2E8C7AD2B6E9251003DE1AE /* FidoAppApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FidoAppApp.swift; sourceTree = "<group>"; };
-		C2E8C7AF2B6E9251003DE1AE /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		C2E8C7AF2B6E9251003DE1AE /* BreedListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreedListView.swift; sourceTree = "<group>"; };
 		C2E8C7B12B6E9253003DE1AE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C2E8C7B42B6E9253003DE1AE /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		C2E8C7BA2B6E9253003DE1AE /* FidoAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FidoAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -73,6 +78,23 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		C23203382B6EA01600645D8F /* BreedList */ = {
+			isa = PBXGroup;
+			children = (
+				C2E8C7AF2B6E9251003DE1AE /* BreedListView.swift */,
+				C23203392B6EA03100645D8F /* BreedListFeature.swift */,
+			);
+			path = BreedList;
+			sourceTree = "<group>";
+		};
+		C232033D2B6EB12300645D8F /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				C232033E2B6EB13800645D8F /* Breed.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
 		C2E8C7A12B6E9251003DE1AE = {
 			isa = PBXGroup;
 			children = (
@@ -96,8 +118,10 @@
 		C2E8C7AC2B6E9251003DE1AE /* FidoApp */ = {
 			isa = PBXGroup;
 			children = (
+				C232033D2B6EB12300645D8F /* Models */,
+				C23203382B6EA01600645D8F /* BreedList */,
 				C2E8C7AD2B6E9251003DE1AE /* FidoAppApp.swift */,
-				C2E8C7AF2B6E9251003DE1AE /* ContentView.swift */,
+				C232033B2B6EACAA00645D8F /* Info.plist */,
 				C2E8C7B12B6E9253003DE1AE /* Assets.xcassets */,
 				C2E8C7B32B6E9253003DE1AE /* Preview Content */,
 			);
@@ -265,7 +289,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C2E8C7B02B6E9251003DE1AE /* ContentView.swift in Sources */,
+				C2E8C7B02B6E9251003DE1AE /* BreedListView.swift in Sources */,
+				C232033A2B6EA03100645D8F /* BreedListFeature.swift in Sources */,
+				C232033F2B6EB13800645D8F /* Breed.swift in Sources */,
 				C2E8C7AE2B6E9251003DE1AE /* FidoAppApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -433,6 +459,7 @@
 				DEVELOPMENT_TEAM = X82N4CHKBS;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = FidoApp/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -462,6 +489,7 @@
 				DEVELOPMENT_TEAM = X82N4CHKBS;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = FidoApp/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
