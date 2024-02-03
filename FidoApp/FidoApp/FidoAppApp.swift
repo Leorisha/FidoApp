@@ -11,14 +11,14 @@ import ComposableArchitecture
 @main
 struct FidoAppApp: App {
 
-  static let store = Store(initialState: BreedListFeature.State()) {
-    BreedListFeature()
+  static let store = Store(initialState: TabBreedFeature.State()) {
+    TabBreedFeature()
       ._printChanges()
   }
 
     var body: some Scene {
         WindowGroup {
-          BreedListView(store: FidoAppApp.store)
+          TabBreedView(store: FidoAppApp.store)
         }
     }
 }
