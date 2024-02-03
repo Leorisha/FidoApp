@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Breed: Equatable, Identifiable, Decodable {
+struct Breed: Equatable, Identifiable, Decodable, Hashable {
   var id: Int
   var breedName: String
   var breedGroup: String?
@@ -22,6 +22,13 @@ struct Breed: Equatable, Identifiable, Decodable {
     case imageUrl = "reference_image_id"
   }
 
+  init(id: Int, breedName: String, breedGroup: String?, temperament: String?, imageUrl: String) {
+    self.id = id
+    self.breedName = breedName
+    self.breedGroup = breedGroup
+    self.temperament = temperament
+    self.imageUrl = imageUrl
+  }
 
   init(from decoder: Decoder) throws {
     let container = try decoder.container(keyedBy: CodingKeys.self)
@@ -31,4 +38,14 @@ struct Breed: Equatable, Identifiable, Decodable {
     temperament = try? container.decode(String.self, forKey: .temperament)
     let reference = try container.decode(String.self, forKey: .imageUrl)
     imageUrl = "https://cdn2.thedogapi.com/images/\(reference).jpg"  }
+
+  static func mock() -> Breed {
+    return Breed(
+      id: 1,
+      breedName: "Sample Breed",
+      breedGroup: "Sample Group",
+      temperament: "Friendly",
+      imageUrl: "https://cdn2.thedogapi.com/images/HkNS3gqEm.jpg"
+    )
+  }
 }
