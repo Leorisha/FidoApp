@@ -13,7 +13,7 @@ struct BreedListView: View {
   @Bindable var store: StoreOf<BreedListFeature>
 
   var body: some View {
-    NavigationView {
+    NavigationStack(path: $store.scope(state: \.path, action: \.path)) {
       VStack {
         self.pickerView()
         Group {
@@ -29,9 +29,12 @@ struct BreedListView: View {
       }
       .navigationTitle("Breeds")
     }
-    .onAppear() {
-      store.send(.fetchBreeds(page: store.currentPage, limit: store.itemsPerPage))
-    }
+  destination: { store in
+    BreedDetailView(store: store)
+  }
+  .onAppear() {
+    store.send(.fetchBreeds(page: store.currentPage, limit: store.itemsPerPage))
+  }
   }
 
   private func pickerView() -> some View {
@@ -47,9 +50,10 @@ struct BreedListView: View {
   private func listView()-> some View {
     return ScrollView {
       ForEach(store.breeds.prefix(store.currentPage * store.itemsPerPage), id: \.self) { breed in
-        self.tableViewCell(for: breed)
-          .frame(width: .infinity)
-          .padding()
+        NavigationLink(state: BreedDetailFeature.State(breed: breed)){
+          self.tableViewCell(for: breed)
+            .padding()
+        }
       }
     }
   }
@@ -60,7 +64,9 @@ struct BreedListView: View {
     return ScrollView{
       LazyVGrid(columns: columns, spacing: 16) {
         ForEach(store.breeds.prefix(store.currentPage * store.itemsPerPage), id: \.self) { breed in
-          gridCell(for: breed)
+          NavigationLink(state: BreedDetailFeature.State(breed: breed)){
+            gridCell(for: breed)
+          }
         }
       }
     }
