@@ -11,6 +11,8 @@ import ComposableArchitecture
 @Reducer
 struct BreedSearchFeature {
 
+  @Dependency(\.searchBreeds) var dogAPI
+
   @ObservableState
   struct State: Equatable {
     var searchText: String = ""
@@ -34,20 +36,7 @@ struct BreedSearchFeature {
         return .none
       case .performSearch(let text):
         return .run { send in
-          print("https://api.thedogapi.com/v1/breeds/search?name=\(text)")
-          let (data, _) = try await URLSession.shared
-            .data(from: URL(string: "https://api.thedogapi.com/v1/breeds/search?q=\(text)")!)
-
-          // Convert data to string for printing
-             if let dataString = String(data: data, encoding: .utf8) {
-                 print("Received Data as String:\n\(dataString)")
-             } else {
-                 print("Unable to convert data to string.")
-             }
-
-          let breeds = try JSONDecoder().decode([Breed].self, from: data)
-
-          await send(.searchResultsResponse(breeds))
+          try await send(.searchResultsResponse(self.dogAPI.searchBreeds(text)))
         }
       case .searchResultsResponse(let breeds):
         state.searchResults = breeds

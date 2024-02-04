@@ -6,8 +6,9 @@
 //
 
 import Foundation
+import SwiftData
 
-struct Breed: Equatable, Identifiable, Decodable, Hashable {
+struct Breed: Equatable, Decodable, Hashable {
   var id: Int
   var name: String
   var group: String?

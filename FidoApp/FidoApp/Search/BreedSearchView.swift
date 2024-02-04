@@ -9,6 +9,7 @@ import SwiftUI
 import ComposableArchitecture
 
 struct BreedSearchView: View {
+
   @Bindable var store: StoreOf<BreedSearchFeature>
 
   var body: some View {

@@ -10,6 +10,8 @@ import ComposableArchitecture
 
 @Reducer
 struct BreedListFeature {
+  @Dependency(\.fetchBreeds) var dogAPI
+
   @ObservableState
   struct State: Equatable {
     var breeds: [Breed] = []
@@ -33,11 +35,7 @@ struct BreedListFeature {
       switch action {
       case .fetchBreeds(let page, let limit):
         return .run { send in
-          let (data, _) = try await URLSession.shared
-            .data(from: URL(string: "https://api.thedogapi.com/v1/breeds?limit=\(limit)&page=\(page)")!)
-          let breeds = try JSONDecoder().decode([Breed].self, from: data)
-
-          await send(.fetchBreedsResponse(breeds))
+          try await send(.fetchBreedsResponse(self.dogAPI.fetchBreeds(limit, page)))
         }
       case .fetchBreedsResponse(let breeds):
         state.breeds += breeds
