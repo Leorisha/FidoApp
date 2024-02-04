@@ -32,7 +32,6 @@ struct BreedListView: View {
     .onAppear() {
       store.send(.fetchBreeds(page: store.currentPage, limit: store.itemsPerPage))
     }
-    .padding()
   }
 
   private func pickerView() -> some View {
@@ -46,29 +45,13 @@ struct BreedListView: View {
   }
 
   private func listView()-> some View {
-    return   List {
+    return ScrollView {
       ForEach(store.breeds.prefix(store.currentPage * store.itemsPerPage), id: \.self) { breed in
-        HStack {
-          AsyncImage(url: URL(string: breed.imageUrl)) { phase in
-                      switch phase {
-                      case .empty:
-                          ProgressView()
-                      case .success(let image):
-                          image
-                              .resizable()
-                              .aspectRatio(contentMode: .fit)
-                      case .failure:
-                          Text("Failed to load image")
-                      @unknown default:
-                          EmptyView()
-                      }
-                  }
-                  .frame(width: 100, height: 100)
-          Text(breed.breedName)
-        }
+        self.tableViewCell(for: breed)
+          .frame(width: .infinity)
+          .padding()
       }
     }
-
   }
 
   private func gridView()-> some View {
@@ -77,34 +60,56 @@ struct BreedListView: View {
     return ScrollView{
       LazyVGrid(columns: columns, spacing: 16) {
         ForEach(store.breeds.prefix(store.currentPage * store.itemsPerPage), id: \.self) { breed in
-          RoundedRectangle(cornerRadius: 10)
-            .frame(height: 150)
-            .overlay(
-              VStack {
-                AsyncImage(url: URL(string: breed.imageUrl)) { phase in
-                  switch phase {
-                  case .empty:
-                    ProgressView()
-                  case .success(let image):
-                    image
-                      .resizable()
-                      .aspectRatio(contentMode: .fit)
-                  case .failure:
-                    Text("Failed to load image")
-                  @unknown default:
-                    EmptyView()
-                  }
-                }
-                .frame(width: 100, height: 100)
-                Text(breed.breedName)
-                  .foregroundColor(.white)
-              }
-            )
-            .foregroundColor(.gray)
+          gridCell(for: breed)
         }
       }
     }
     .padding()
+  }
+
+  private func tableViewCell(for breed: Breed) -> some View {
+    return HStack {
+      AsyncImage(url: URL(string: breed.imageUrl)) { phase in
+        switch phase {
+        case .empty:
+          ProgressView()
+        case .success(let image):
+          image
+            .resizable()
+            .aspectRatio(contentMode: .fit)
+        case .failure:
+          Text("Failed to load image")
+        @unknown default:
+          EmptyView()
+        }
+      }
+      .frame(width: 100, height: 100)
+      Text(breed.name)
+      Spacer()
+    }
+  }
+
+  private func gridCell(for breed: Breed) -> some View {
+    return VStack {
+      AsyncImage(url: URL(string: breed.imageUrl)) { phase in
+        switch phase {
+        case .empty:
+          ProgressView()
+        case .success(let image):
+          image
+            .resizable()
+            .aspectRatio(contentMode: .fit)
+        case .failure:
+          Text("Failed to load image")
+        @unknown default:
+          EmptyView()
+        }
+      }
+      .frame(width: 100, height: 100)
+      Text(breed.name)
+        .multilineTextAlignment(.center)
+        .padding()
+    }
   }
 }
 

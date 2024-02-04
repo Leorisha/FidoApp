@@ -32,6 +32,14 @@ struct BreedListFeature {
         return .run { send in
           let (data, _) = try await URLSession.shared
             .data(from: URL(string: "https://api.thedogapi.com/v1/breeds?limit=\(limit)&page=\(page)")!)
+
+          // Convert data to a string and print it
+             if let dataString = String(data: data, encoding: .utf8) {
+                 print("Received data:\n\(dataString)")
+             } else {
+                 print("Failed to convert data to string.")
+             }
+          
           let breeds = try JSONDecoder().decode([Breed].self, from: data)
 
           await send(.fetchBreedsResponse(breeds))

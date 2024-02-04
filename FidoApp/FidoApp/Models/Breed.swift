@@ -9,23 +9,29 @@ import Foundation
 
 struct Breed: Equatable, Identifiable, Decodable, Hashable {
   var id: Int
-  var breedName: String
-  var breedGroup: String?
+  var name: String
+  var group: String?
+  var origin: String?
+  var category: String?
   var temperament: String?
   var imageUrl: String
 
   private enum CodingKeys: String, CodingKey {
     case id
-    case breedName = "name"
-    case breedGroup = "breed_group"
+    case name
+    case group = "breed_group"
+    case category = "bred_for"
+    case origin = "country_code"
     case temperament
     case imageUrl = "reference_image_id"
   }
 
-  init(id: Int, breedName: String, breedGroup: String?, temperament: String?, imageUrl: String) {
+  init(id: Int, name: String, group: String?, category: String?, origin: String?, temperament: String?, imageUrl: String) {
     self.id = id
-    self.breedName = breedName
-    self.breedGroup = breedGroup
+    self.name = name
+    self.group = group
+    self.origin = origin
+    self.category = category
     self.temperament = temperament
     self.imageUrl = imageUrl
   }
@@ -33,8 +39,9 @@ struct Breed: Equatable, Identifiable, Decodable, Hashable {
   init(from decoder: Decoder) throws {
     let container = try decoder.container(keyedBy: CodingKeys.self)
     id = try container.decode(Int.self, forKey: .id)
-    breedName = try container.decode(String.self, forKey: .breedName)
-    breedGroup = try? container.decode(String.self, forKey: .breedGroup)
+    name = try container.decode(String.self, forKey: .name)
+    group = try? container.decode(String.self, forKey: .group)
+    category = try? container.decode(String.self, forKey: .category)
     temperament = try? container.decode(String.self, forKey: .temperament)
     let reference = try container.decode(String.self, forKey: .imageUrl)
     imageUrl = "https://cdn2.thedogapi.com/images/\(reference).jpg"  }
@@ -42,8 +49,10 @@ struct Breed: Equatable, Identifiable, Decodable, Hashable {
   static func mock() -> Breed {
     return Breed(
       id: 1,
-      breedName: "Sample Breed",
-      breedGroup: "Sample Group",
+      name: "Sample Breed",
+      group: "Sample Group",
+      category: "Sample Category",
+      origin: "US",
       temperament: "Friendly",
       imageUrl: "https://cdn2.thedogapi.com/images/HkNS3gqEm.jpg"
     )
