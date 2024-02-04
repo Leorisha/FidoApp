@@ -16,6 +16,8 @@ struct BreedListFeature {
     var currentPage = 1
     var itemsPerPage = 10
     var selectedView: ViewType = .list
+
+    var path = StackState<BreedDetailFeature.State>()
   }
 
   enum Action {
@@ -23,6 +25,7 @@ struct BreedListFeature {
     case fetchBreedsResponse(_ :[Breed])
     case setSelection(ViewType)
     case loadMore
+    case path(StackAction<BreedDetailFeature.State, BreedDetailFeature.Action>)
   }
 
   var body: some ReducerOf<Self> {
@@ -32,6 +35,7 @@ struct BreedListFeature {
         return .run { send in
           let (data, _) = try await URLSession.shared
             .data(from: URL(string: "https://api.thedogapi.com/v1/breeds?limit=\(limit)&page=\(page)")!)
+          
           let breeds = try JSONDecoder().decode([Breed].self, from: data)
 
           await send(.fetchBreedsResponse(breeds))
@@ -45,8 +49,13 @@ struct BreedListFeature {
       case .loadMore:
         state.currentPage += 1
         return .send(.fetchBreeds(page: state.currentPage, limit: state.itemsPerPage))
+      case .path:
+             return .none
       }
     }
+    .forEach(\.path, action: \.path) {
+         BreedDetailFeature()
+       }
   }
 
   enum ViewType: String, CaseIterable {
