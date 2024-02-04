@@ -16,7 +16,7 @@ struct BreedListView: View {
   var body: some View {
     NavigationStack(path: $store.scope(state: \.path, action: \.path)) {
       VStack {
-        
+
         self.pickerView()
 
         Group {
@@ -26,8 +26,7 @@ struct BreedListView: View {
             self.gridView()
           }
         }
-        
-        if networkMonitor.isConnected {
+
           if store.isLoading {
             ProgressView()
           } else if store.shouldShowError {
@@ -42,7 +41,7 @@ struct BreedListView: View {
               store.send(.loadMore)
             }
           }
-        }
+      
       }
       .navigationTitle("Breeds")
     }
@@ -50,10 +49,8 @@ struct BreedListView: View {
     BreedDetailView(store: store)
   }
   .onAppear() {
-    store.send(.fetchOfflineBreeds)
-
-    if store.breeds.isEmpty && networkMonitor.isConnected {
-      store.send(.fetchBreeds(page: store.currentPage, limit: store.itemsPerPage))
+    if store.breeds.isEmpty {
+      store.send(.fetchOfflineBreeds)
     }
   }
   }
@@ -70,7 +67,7 @@ struct BreedListView: View {
 
   private func listView()-> some View {
     return ScrollView {
-      ForEach(store.breeds, id: \.self) { breed in
+      ForEach(store.breeds.prefix(store.currentPage * store.itemsPerPage), id: \.self) { breed in
         NavigationLink(state: BreedDetailFeature.State(breed: breed)){
           self.tableViewCell(for: breed)
             .padding()
@@ -84,7 +81,7 @@ struct BreedListView: View {
 
     return ScrollView{
       LazyVGrid(columns: columns, spacing: 16) {
-        ForEach(store.breeds, id: \.self) { breed in
+        ForEach(store.breeds.prefix(store.currentPage * store.itemsPerPage), id: \.self) { breed in
           NavigationLink(state: BreedDetailFeature.State(breed: breed)){
             gridCell(for: breed)
           }

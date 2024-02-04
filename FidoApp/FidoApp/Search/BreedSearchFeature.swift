@@ -11,12 +11,15 @@ import ComposableArchitecture
 @Reducer
 struct BreedSearchFeature {
 
-  @Dependency(\.searchBreeds) var dogAPI
-
+  @Dependency(\.fetchBreeds) var dogAPI
+  @Dependency(\.swiftData) var context
+  @Dependency(\.databaseService) var databaseService
+  
   @ObservableState
   struct State: Equatable {
     var dataLoadingStatus = DataLoadingStatus.notStarted
     var searchText: String = ""
+    var allBreeds: [Breed] = []
     var searchResults: [Breed] = []
     var path = StackState<BreedDetailFeature.State>()
     
@@ -32,9 +35,11 @@ struct BreedSearchFeature {
   enum Action {
     case updateText(_ text: String)
     case performSearch(_ text: String)
-    case searchResultsResponse(Result<[Breed], Error>)
     case path(StackAction<BreedDetailFeature.State, BreedDetailFeature.Action>)
     case retry
+    case fetchOfflineBreeds
+    case fetchBreeds
+    case fetchBreedsResponse(Result<[Breed], Error>)
   }
 
   var body: some ReducerOf<Self> {
@@ -50,23 +55,50 @@ struct BreedSearchFeature {
 
         state.dataLoadingStatus = .loading
 
+        state.searchResults = state.allBreeds.filter{ breed in
+          return breed.name.lowercased().contains(text.lowercased())
+        }
+
+        print(state.searchResults)
+        state.dataLoadingStatus = .success
+
+        return .none
+      case .fetchBreeds:
+
+        if state.dataLoadingStatus == .loading {
+          return .none
+        }
+
+        state.dataLoadingStatus = .loading
+
         return .run { send in
           do {
-            let breeds = try await self.dogAPI.searchBreeds(text)
+            let breeds = try await self.dogAPI.fetchBreeds()
             let result: Result<[Breed], Error> = .success(breeds)
-            await send(.searchResultsResponse(result))
+            await send(.fetchBreedsResponse(result))
           } catch {
             let result: Result<[Breed], Error> = .failure(error)
-            await send(.searchResultsResponse(result))
+            await send(.fetchBreedsResponse(result))
           }
         }
-      case .searchResultsResponse(.success(let breeds)):
+      case .fetchBreedsResponse(.success(let breeds)):
         state.dataLoadingStatus = .success
-        state.searchResults = breeds
+
+        state.allBreeds += breeds
+
+        try? context.add(breeds)
+
         return .none
-      case .searchResultsResponse(.failure(_)):
+      case .fetchBreedsResponse(.failure(_)):
         state.dataLoadingStatus = .error
         return .none
+      case .fetchOfflineBreeds:
+        state.allBreeds = try! context.fetchAll()
+        if state.allBreeds.isEmpty {
+          return .send(.fetchBreeds)
+        } else {
+          return .none
+        }
       case .path:
         return .none
       case .retry:

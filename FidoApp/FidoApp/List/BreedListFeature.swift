@@ -36,35 +36,32 @@ struct BreedListFeature {
       dataLoadingStatus == .loading
     }
 
-    var isOnline: Bool = false
   }
 
   enum Action {
-    case fetchBreeds(page: Int, limit: Int)
+    case fetchBreeds
     case fetchOfflineBreeds
     case fetchBreedsResponse(Result<[Breed], Error>)
     case setSelection(ViewType)
     case loadMore
     case retry
-    case updateOnline(value: Bool)
     case path(StackAction<BreedDetailFeature.State, BreedDetailFeature.Action>)
   }
 
   var body: some ReducerOf<Self> {
     Reduce { state, action in
       switch action {
-      case .fetchBreeds(let page, let limit):
-        
+      case .fetchBreeds:
+
         if state.dataLoadingStatus == .loading {
           return .none
         }
 
         state.dataLoadingStatus = .loading
 
-
         return .run { send in
           do {
-            let breeds = try await self.dogAPI.fetchBreeds(limit, page)
+            let breeds = try await self.dogAPI.fetchBreeds()
             let result: Result<[Breed], Error> = .success(breeds)
             await send(.fetchBreedsResponse(result))
           } catch {
@@ -89,25 +86,21 @@ struct BreedListFeature {
         return .none
       case .fetchOfflineBreeds:
         state.breeds = try! context.fetchAll()
-        print(state.breeds)
-        return .none
+        if state.breeds.isEmpty {
+          return .send(.fetchBreeds)
+        } else {
+          return .none
+        }
       case .setSelection(let viewType):
         state.selectedView = viewType
         return .none
       case .retry:
-        return .send(.fetchBreeds(page: state.currentPage, limit: state.itemsPerPage))
+        return .send(.fetchBreeds)
       case .loadMore:
         state.currentPage += 1
-        return .send(.fetchBreeds(page: state.currentPage, limit: state.itemsPerPage))
+        return .none
       case .path:
         return .none
-      case .updateOnline(let newValue):
-        state.isOnline = networkMonitor.isConnected || newValue
-        if state.isOnline {
-          return .none
-        } else {
-          return .send(.fetchOfflineBreeds)
-        }
       }
     }
     .forEach(\.path, action: \.path) {

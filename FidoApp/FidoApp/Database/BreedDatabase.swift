@@ -61,7 +61,6 @@ extension BreedDatabase: DependencyKey {
 
               for model in models {
                 print("DB INSERT \(model.name)")
-                breedContext.delete(model)
                 breedContext.insert(model)
               }
 
