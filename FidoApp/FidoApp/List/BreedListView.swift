@@ -23,9 +23,22 @@ struct BreedListView: View {
             self.gridView()
           }
         }
-        Button("Load More") {
-          store.send(.loadMore)
+        
+        if store.isLoading {
+          ProgressView()
+        } else if store.shouldShowError {
+          VStack {
+            Text("Error occurred")
+            Button("Retry") {
+              store.send(.retry)
+            }
+          }
+        } else {
+          Button("Load More") {
+            store.send(.loadMore)
+          }
         }
+
       }
       .navigationTitle("Breeds")
     }
@@ -33,7 +46,9 @@ struct BreedListView: View {
     BreedDetailView(store: store)
   }
   .onAppear() {
-    store.send(.fetchBreeds(page: store.currentPage, limit: store.itemsPerPage))
+    if store.breeds.isEmpty {
+      store.send(.fetchBreeds(page: store.currentPage, limit: store.itemsPerPage))
+    }
   }
   }
 

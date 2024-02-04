@@ -14,19 +14,29 @@ struct BreedListFeature {
 
   @ObservableState
   struct State: Equatable {
+    var dataLoadingStatus = DataLoadingStatus.notStarted
     var breeds: [Breed] = []
     var currentPage = 1
     var itemsPerPage = 10
     var selectedView: ViewType = .list
 
     var path = StackState<BreedDetailFeature.State>()
+
+    var shouldShowError: Bool {
+      dataLoadingStatus == .error
+    }
+
+    var isLoading: Bool {
+      dataLoadingStatus == .loading
+    }
   }
 
   enum Action {
     case fetchBreeds(page: Int, limit: Int)
-    case fetchBreedsResponse(_ :[Breed])
+    case fetchBreedsResponse(Result<[Breed], Error>)
     case setSelection(ViewType)
     case loadMore
+    case retry
     case path(StackAction<BreedDetailFeature.State, BreedDetailFeature.Action>)
   }
 
@@ -34,25 +44,45 @@ struct BreedListFeature {
     Reduce { state, action in
       switch action {
       case .fetchBreeds(let page, let limit):
-        return .run { send in
-          try await send(.fetchBreedsResponse(self.dogAPI.fetchBreeds(limit, page)))
+        if state.dataLoadingStatus == .loading {
+          return .none
         }
-      case .fetchBreedsResponse(let breeds):
+
+        state.dataLoadingStatus = .loading
+
+
+        return .run { send in
+          do {
+            let breeds = try await self.dogAPI.fetchBreeds(limit, page)
+            let result: Result<[Breed], Error> = .success(breeds)
+            await send(.fetchBreedsResponse(result))
+          } catch {
+            let result: Result<[Breed], Error> = .failure(error)
+            await send(.fetchBreedsResponse(result))
+          }
+        }
+      case .fetchBreedsResponse(.success(let breeds)):
+        state.dataLoadingStatus = .success
         state.breeds += breeds
+        return .none
+      case .fetchBreedsResponse(.failure(let error)):
+        state.dataLoadingStatus = .error
         return .none
       case .setSelection(let viewType):
         state.selectedView = viewType
         return .none
+      case .retry:
+        return .send(.fetchBreeds(page: state.currentPage, limit: state.itemsPerPage))
       case .loadMore:
         state.currentPage += 1
         return .send(.fetchBreeds(page: state.currentPage, limit: state.itemsPerPage))
       case .path:
-             return .none
+        return .none
       }
     }
     .forEach(\.path, action: \.path) {
-         BreedDetailFeature()
-       }
+      BreedDetailFeature()
+    }
   }
 
   enum ViewType: String, CaseIterable {

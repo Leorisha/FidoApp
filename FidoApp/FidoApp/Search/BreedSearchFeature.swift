@@ -15,17 +15,26 @@ struct BreedSearchFeature {
 
   @ObservableState
   struct State: Equatable {
+    var dataLoadingStatus = DataLoadingStatus.notStarted
     var searchText: String = ""
     var searchResults: [Breed] = []
     var path = StackState<BreedDetailFeature.State>()
+    
+    var shouldShowError: Bool {
+      dataLoadingStatus == .error
+    }
 
+    var isLoading: Bool {
+      dataLoadingStatus == .loading
+    }
   }
 
   enum Action {
     case updateText(_ text: String)
     case performSearch(_ text: String)
-    case searchResultsResponse(_ :[Breed])
+    case searchResultsResponse(Result<[Breed], Error>)
     case path(StackAction<BreedDetailFeature.State, BreedDetailFeature.Action>)
+    case retry
   }
 
   var body: some ReducerOf<Self> {
@@ -35,14 +44,33 @@ struct BreedSearchFeature {
         state.searchText = text
         return .none
       case .performSearch(let text):
-        return .run { send in
-          try await send(.searchResultsResponse(self.dogAPI.searchBreeds(text)))
+        if state.dataLoadingStatus == .loading {
+          return .none
         }
-      case .searchResultsResponse(let breeds):
+
+        state.dataLoadingStatus = .loading
+
+        return .run { send in
+          do {
+            let breeds = try await self.dogAPI.searchBreeds(text)
+            let result: Result<[Breed], Error> = .success(breeds)
+            await send(.searchResultsResponse(result))
+          } catch {
+            let result: Result<[Breed], Error> = .failure(error)
+            await send(.searchResultsResponse(result))
+          }
+        }
+      case .searchResultsResponse(.success(let breeds)):
+        state.dataLoadingStatus = .success
         state.searchResults = breeds
+        return .none
+      case .searchResultsResponse(.failure(let error)):
+        state.dataLoadingStatus = .error
         return .none
       case .path:
         return .none
+      case .retry:
+        return .send(.performSearch(state.searchText))
       }
     }
     .forEach(\.path, action: \.path) {
