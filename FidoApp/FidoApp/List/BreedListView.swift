@@ -93,6 +93,7 @@ struct BreedListView: View {
       Text(breed.name)
       Spacer()
     }
+    .foregroundColor(.black)
   }
 
   private func gridCell(for breed: Breed) -> some View {
@@ -116,7 +117,9 @@ struct BreedListView: View {
         .multilineTextAlignment(.center)
         .padding()
     }
+    .foregroundColor(.black)
   }
+
 }
 
 #Preview {

@@ -9,10 +9,10 @@
 /* Begin PBXBuildFile section */
 		C232033A2B6EA03100645D8F /* BreedListFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C23203392B6EA03100645D8F /* BreedListFeature.swift */; };
 		C232033F2B6EB13800645D8F /* Breed.swift in Sources */ = {isa = PBXBuildFile; fileRef = C232033E2B6EB13800645D8F /* Breed.swift */; };
-		C232034A2B6EE50400645D8F /* SearchBreedFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C23203492B6EE50400645D8F /* SearchBreedFeature.swift */; };
+		C232034A2B6EE50400645D8F /* BreedSearchFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C23203492B6EE50400645D8F /* BreedSearchFeature.swift */; };
 		C232034C2B6EE51B00645D8F /* TabBreedFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C232034B2B6EE51B00645D8F /* TabBreedFeature.swift */; };
 		C232034E2B6EE52700645D8F /* TabBreedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C232034D2B6EE52700645D8F /* TabBreedView.swift */; };
-		C23203502B6EE53500645D8F /* SearchBreedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C232034F2B6EE53500645D8F /* SearchBreedView.swift */; };
+		C23203502B6EE53500645D8F /* BreedSearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C232034F2B6EE53500645D8F /* BreedSearchView.swift */; };
 		C295BFE62B6EF5BE00154169 /* BreedListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C295BFE52B6EF5BE00154169 /* BreedListView.swift */; };
 		C295BFF42B6FB82000154169 /* BreedDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C295BFF32B6FB82000154169 /* BreedDetailView.swift */; };
 		C295BFF62B6FB82E00154169 /* BreedDetailFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C295BFF52B6FB82E00154169 /* BreedDetailFeature.swift */; };
@@ -45,10 +45,10 @@
 /* Begin PBXFileReference section */
 		C23203392B6EA03100645D8F /* BreedListFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreedListFeature.swift; sourceTree = "<group>"; };
 		C232033E2B6EB13800645D8F /* Breed.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Breed.swift; sourceTree = "<group>"; };
-		C23203492B6EE50400645D8F /* SearchBreedFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBreedFeature.swift; sourceTree = "<group>"; };
+		C23203492B6EE50400645D8F /* BreedSearchFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreedSearchFeature.swift; sourceTree = "<group>"; };
 		C232034B2B6EE51B00645D8F /* TabBreedFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBreedFeature.swift; sourceTree = "<group>"; };
 		C232034D2B6EE52700645D8F /* TabBreedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBreedView.swift; sourceTree = "<group>"; };
-		C232034F2B6EE53500645D8F /* SearchBreedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBreedView.swift; sourceTree = "<group>"; };
+		C232034F2B6EE53500645D8F /* BreedSearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreedSearchView.swift; sourceTree = "<group>"; };
 		C295BFE52B6EF5BE00154169 /* BreedListView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BreedListView.swift; sourceTree = "<group>"; };
 		C295BFF32B6FB82000154169 /* BreedDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreedDetailView.swift; sourceTree = "<group>"; };
 		C295BFF52B6FB82E00154169 /* BreedDetailFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreedDetailFeature.swift; sourceTree = "<group>"; };
@@ -118,8 +118,8 @@
 		C23203482B6EE4E900645D8F /* Search */ = {
 			isa = PBXGroup;
 			children = (
-				C23203492B6EE50400645D8F /* SearchBreedFeature.swift */,
-				C232034F2B6EE53500645D8F /* SearchBreedView.swift */,
+				C232034F2B6EE53500645D8F /* BreedSearchView.swift */,
+				C23203492B6EE50400645D8F /* BreedSearchFeature.swift */,
 			);
 			path = Search;
 			sourceTree = "<group>";
@@ -332,10 +332,10 @@
 				C232033A2B6EA03100645D8F /* BreedListFeature.swift in Sources */,
 				C232034C2B6EE51B00645D8F /* TabBreedFeature.swift in Sources */,
 				C295BFF62B6FB82E00154169 /* BreedDetailFeature.swift in Sources */,
-				C23203502B6EE53500645D8F /* SearchBreedView.swift in Sources */,
+				C23203502B6EE53500645D8F /* BreedSearchView.swift in Sources */,
 				C232033F2B6EB13800645D8F /* Breed.swift in Sources */,
 				C232034E2B6EE52700645D8F /* TabBreedView.swift in Sources */,
-				C232034A2B6EE50400645D8F /* SearchBreedFeature.swift in Sources */,
+				C232034A2B6EE50400645D8F /* BreedSearchFeature.swift in Sources */,
 				C2E8C7AE2B6E9251003DE1AE /* FidoAppApp.swift in Sources */,
 				C295BFF42B6FB82000154169 /* BreedDetailView.swift in Sources */,
 				C295BFE62B6EF5BE00154169 /* BreedListView.swift in Sources */,

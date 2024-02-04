@@ -35,7 +35,6 @@ struct BreedListFeature {
         return .run { send in
           let (data, _) = try await URLSession.shared
             .data(from: URL(string: "https://api.thedogapi.com/v1/breeds?limit=\(limit)&page=\(page)")!)
-          
           let breeds = try JSONDecoder().decode([Breed].self, from: data)
 
           await send(.fetchBreedsResponse(breeds))
