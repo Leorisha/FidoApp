@@ -11,7 +11,6 @@ import ComposableArchitecture
 struct BreedListView: View {
 
   @Bindable var store: StoreOf<BreedListFeature>
-  @EnvironmentObject var networkMonitor: NetworkMonitor
 
   var body: some View {
     NavigationStack(path: $store.scope(state: \.path, action: \.path)) {
@@ -27,21 +26,27 @@ struct BreedListView: View {
           }
         }
 
-          if store.isLoading {
-            ProgressView()
-          } else if store.shouldShowError {
-            VStack {
-              Text("Error occurred")
-              Button("Retry") {
-                store.send(.retry)
-              }
-            }
-          } else {
-            Button("Load More") {
-              store.send(.loadMore)
+        if store.isLoading {
+          ProgressView()
+        } else if store.shouldShowError {
+          VStack {
+            Text("Error occurred")
+            Button("Retry") {
+              store.send(.retry)
             }
           }
-      
+        } else {
+          HStack {
+            Button("-") {
+              store.send(.minusPage)
+            }
+            Text("\(store.currentPage) / \(store.totalPages)")
+            Button("+") {
+              store.send(.plusPage)
+            }
+           }
+        }
+
       }
       .navigationTitle("Breeds")
     }
@@ -67,7 +72,7 @@ struct BreedListView: View {
 
   private func listView()-> some View {
     return ScrollView {
-      ForEach(store.breeds.prefix(store.currentPage * store.itemsPerPage), id: \.self) { breed in
+      ForEach(store.displayingBreeds, id: \.self) { breed in
         NavigationLink(state: BreedDetailFeature.State(breed: breed)){
           self.tableViewCell(for: breed)
             .padding()
@@ -81,7 +86,7 @@ struct BreedListView: View {
 
     return ScrollView{
       LazyVGrid(columns: columns, spacing: 16) {
-        ForEach(store.breeds.prefix(store.currentPage * store.itemsPerPage), id: \.self) { breed in
+        ForEach(store.displayingBreeds, id: \.self) { breed in
           NavigationLink(state: BreedDetailFeature.State(breed: breed)){
             gridCell(for: breed)
           }

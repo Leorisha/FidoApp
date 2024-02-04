@@ -22,8 +22,10 @@ struct BreedListFeature {
   struct State: Equatable {
     var dataLoadingStatus = DataLoadingStatus.notStarted
     var breeds: [Breed] = []
+    var displayingBreeds: [Breed] = []
     var currentPage = 1
     var itemsPerPage = 10
+    var totalPages = 1
     var selectedView: ViewType = .list
 
     var path = StackState<BreedDetailFeature.State>()
@@ -43,9 +45,11 @@ struct BreedListFeature {
     case fetchOfflineBreeds
     case fetchBreedsResponse(Result<[Breed], Error>)
     case setSelection(ViewType)
-    case loadMore
     case retry
     case path(StackAction<BreedDetailFeature.State, BreedDetailFeature.Action>)
+    case plusPage
+    case minusPage
+    case filterBreeds
   }
 
   var body: some ReducerOf<Self> {
@@ -77,10 +81,11 @@ struct BreedListFeature {
         }
 
         state.breeds += newBreeds
-
+        state.totalPages = state.breeds.count / state.itemsPerPage
+        
         try? context.add(newBreeds)
 
-        return .none
+        return .send(.filterBreeds)
       case .fetchBreedsResponse(.failure(_)):
         state.dataLoadingStatus = .error
         return .none
@@ -89,17 +94,30 @@ struct BreedListFeature {
         if state.breeds.isEmpty {
           return .send(.fetchBreeds)
         } else {
-          return .none
+          state.totalPages = state.breeds.count / state.itemsPerPage
+          return .send(.filterBreeds)
         }
       case .setSelection(let viewType):
         state.selectedView = viewType
         return .none
       case .retry:
         return .send(.fetchBreeds)
-      case .loadMore:
-        state.currentPage += 1
-        return .none
       case .path:
+        return .none
+      case .plusPage:
+        if state.currentPage + 1 <= state.totalPages {
+          state.currentPage += 1
+        }
+        return .send(.filterBreeds)
+      case .minusPage:
+        if state.currentPage - 1 > 0 {
+          state.currentPage -= 1
+        }
+        return .send(.filterBreeds)
+      case .filterBreeds:
+        let startIndex = state.currentPage * state.itemsPerPage
+        let endIndex = startIndex + state.itemsPerPage
+        state.displayingBreeds = Array(state.breeds[startIndex..<endIndex])
         return .none
       }
     }

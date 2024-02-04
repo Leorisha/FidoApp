@@ -12,7 +12,6 @@ struct BreedSearchView: View {
 
   @Bindable var store: StoreOf<BreedSearchFeature>
   @FocusState private var searchIsFocused: Bool
-  @EnvironmentObject var networkMonitor: NetworkMonitor
 
   var body: some View {
     NavigationStack(path: $store.scope(state: \.path, action: \.path)) {
