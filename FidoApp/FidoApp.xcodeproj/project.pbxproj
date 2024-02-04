@@ -18,9 +18,10 @@
 		C295BFF62B6FB82E00154169 /* BreedDetailFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C295BFF52B6FB82E00154169 /* BreedDetailFeature.swift */; };
 		C2C7B5292B6FEB340081AFE0 /* DogAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2C7B5282B6FEB340081AFE0 /* DogAPI.swift */; };
 		C2C7B52E2B6FFB370081AFE0 /* DataLoadingStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2C7B52D2B6FFB370081AFE0 /* DataLoadingStatus.swift */; };
-		C2C7B5342B7003830081AFE0 /* NetworkMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2C7B5332B7003830081AFE0 /* NetworkMonitor.swift */; };
 		C2C7B5372B7007500081AFE0 /* Database.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2C7B5362B7007500081AFE0 /* Database.swift */; };
 		C2C7B5392B70078A0081AFE0 /* BreedDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2C7B5382B70078A0081AFE0 /* BreedDatabase.swift */; };
+		C2D7A34C2B703C44001E2AC2 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = C2D7A34B2B703C44001E2AC2 /* Kingfisher */; };
+		C2D7A34E2B703EBE001E2AC2 /* CachedImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D7A34D2B703EBE001E2AC2 /* CachedImageView.swift */; };
 		C2E8C7AE2B6E9251003DE1AE /* FidoAppApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2E8C7AD2B6E9251003DE1AE /* FidoAppApp.swift */; };
 		C2E8C7B22B6E9253003DE1AE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C2E8C7B12B6E9253003DE1AE /* Assets.xcassets */; };
 		C2E8C7B52B6E9253003DE1AE /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C2E8C7B42B6E9253003DE1AE /* Preview Assets.xcassets */; };
@@ -59,9 +60,9 @@
 		C295BFF52B6FB82E00154169 /* BreedDetailFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreedDetailFeature.swift; sourceTree = "<group>"; };
 		C2C7B5282B6FEB340081AFE0 /* DogAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DogAPI.swift; sourceTree = "<group>"; };
 		C2C7B52D2B6FFB370081AFE0 /* DataLoadingStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataLoadingStatus.swift; sourceTree = "<group>"; };
-		C2C7B5332B7003830081AFE0 /* NetworkMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkMonitor.swift; sourceTree = "<group>"; };
 		C2C7B5362B7007500081AFE0 /* Database.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Database.swift; sourceTree = "<group>"; };
 		C2C7B5382B70078A0081AFE0 /* BreedDatabase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreedDatabase.swift; sourceTree = "<group>"; };
+		C2D7A34D2B703EBE001E2AC2 /* CachedImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CachedImageView.swift; sourceTree = "<group>"; };
 		C2E8C7AA2B6E9251003DE1AE /* FidoApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FidoApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C2E8C7AD2B6E9251003DE1AE /* FidoAppApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FidoAppApp.swift; sourceTree = "<group>"; };
 		C2E8C7B12B6E9253003DE1AE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -78,6 +79,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C2D7A34C2B703C44001E2AC2 /* Kingfisher in Frameworks */,
 				C2EA43BA2B6E9F3B00A5302A /* ComposableArchitecture in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -104,6 +106,7 @@
 			children = (
 				C295BFE52B6EF5BE00154169 /* BreedListView.swift */,
 				C23203392B6EA03100645D8F /* BreedListFeature.swift */,
+				C2D7A34D2B703EBE001E2AC2 /* CachedImageView.swift */,
 			);
 			path = List;
 			sourceTree = "<group>";
@@ -148,7 +151,6 @@
 			children = (
 				C2C7B5282B6FEB340081AFE0 /* DogAPI.swift */,
 				C2C7B52D2B6FFB370081AFE0 /* DataLoadingStatus.swift */,
-				C2C7B5332B7003830081AFE0 /* NetworkMonitor.swift */,
 			);
 			path = Network;
 			sourceTree = "<group>";
@@ -242,6 +244,7 @@
 			name = FidoApp;
 			packageProductDependencies = (
 				C2EA43B92B6E9F3B00A5302A /* ComposableArchitecture */,
+				C2D7A34B2B703C44001E2AC2 /* Kingfisher */,
 			);
 			productName = FidoApp;
 			productReference = C2E8C7AA2B6E9251003DE1AE /* FidoApp.app */;
@@ -317,6 +320,7 @@
 			mainGroup = C2E8C7A12B6E9251003DE1AE;
 			packageReferences = (
 				C2EA43B82B6E9F3B00A5302A /* XCRemoteSwiftPackageReference "swift-composable-architecture" */,
+				C2D7A34A2B703C44001E2AC2 /* XCRemoteSwiftPackageReference "Kingfisher" */,
 			);
 			productRefGroup = C2E8C7AB2B6E9251003DE1AE /* Products */;
 			projectDirPath = "";
@@ -367,9 +371,9 @@
 				C23203502B6EE53500645D8F /* BreedSearchView.swift in Sources */,
 				C232033F2B6EB13800645D8F /* Breed.swift in Sources */,
 				C232034E2B6EE52700645D8F /* TabBreedView.swift in Sources */,
+				C2D7A34E2B703EBE001E2AC2 /* CachedImageView.swift in Sources */,
 				C232034A2B6EE50400645D8F /* BreedSearchFeature.swift in Sources */,
 				C2E8C7AE2B6E9251003DE1AE /* FidoAppApp.swift in Sources */,
-				C2C7B5342B7003830081AFE0 /* NetworkMonitor.swift in Sources */,
 				C2C7B5392B70078A0081AFE0 /* BreedDatabase.swift in Sources */,
 				C295BFF42B6FB82000154169 /* BreedDetailView.swift in Sources */,
 				C2C7B52E2B6FFB370081AFE0 /* DataLoadingStatus.swift in Sources */,
@@ -706,6 +710,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		C2D7A34A2B703C44001E2AC2 /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/onevcat/Kingfisher.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 7.10.2;
+			};
+		};
 		C2EA43B82B6E9F3B00A5302A /* XCRemoteSwiftPackageReference "swift-composable-architecture" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/pointfreeco/swift-composable-architecture";
@@ -717,6 +729,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		C2D7A34B2B703C44001E2AC2 /* Kingfisher */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C2D7A34A2B703C44001E2AC2 /* XCRemoteSwiftPackageReference "Kingfisher" */;
+			productName = Kingfisher;
+		};
 		C2EA43B92B6E9F3B00A5302A /* ComposableArchitecture */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = C2EA43B82B6E9F3B00A5302A /* XCRemoteSwiftPackageReference "swift-composable-architecture" */;

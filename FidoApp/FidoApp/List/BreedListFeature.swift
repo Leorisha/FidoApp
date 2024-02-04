@@ -16,8 +16,6 @@ struct BreedListFeature {
   @Dependency(\.swiftData) var context
   @Dependency(\.databaseService) var databaseService
 
-  @EnvironmentObject var networkMonitor: NetworkMonitor
-
   @ObservableState
   struct State: Equatable {
     var dataLoadingStatus = DataLoadingStatus.notStarted

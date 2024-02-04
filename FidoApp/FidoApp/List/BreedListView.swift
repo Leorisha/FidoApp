@@ -98,21 +98,8 @@ struct BreedListView: View {
 
   private func tableViewCell(for breed: Breed) -> some View {
     return HStack {
-      AsyncImage(url: URL(string: breed.imageUrl)) { phase in
-        switch phase {
-        case .empty:
-          ProgressView()
-        case .success(let image):
-          image
-            .resizable()
-            .aspectRatio(contentMode: .fit)
-        case .failure:
-          Text("Failed to load image")
-        @unknown default:
-          EmptyView()
-        }
-      }
-      .frame(width: 100, height: 100)
+      CachedImageView(imageUrl: URL(string: breed.imageUrl))
+      .frame(maxWidth: 100, maxHeight: 100)
       Text(breed.name)
       Spacer()
     }
@@ -121,21 +108,8 @@ struct BreedListView: View {
 
   private func gridCell(for breed: Breed) -> some View {
     return VStack {
-      AsyncImage(url: URL(string: breed.imageUrl)) { phase in
-        switch phase {
-        case .empty:
-          ProgressView()
-        case .success(let image):
-          image
-            .resizable()
-            .aspectRatio(contentMode: .fit)
-        case .failure:
-          Text("Failed to load image")
-        @unknown default:
-          EmptyView()
-        }
-      }
-      .frame(width: 100, height: 100)
+      CachedImageView(imageUrl: URL(string: breed.imageUrl))
+      .frame(maxWidth: 100, maxHeight: 100)
       Text(breed.name)
         .multilineTextAlignment(.center)
         .padding()

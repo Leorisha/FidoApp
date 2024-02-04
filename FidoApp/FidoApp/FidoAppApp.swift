@@ -25,12 +25,9 @@ struct FidoAppApp: App {
       ._printChanges()
   }
 
-  @StateObject var networkMonitor = NetworkMonitor()
-
   var body: some Scene {
     WindowGroup {
       BreedTabView(store: FidoAppApp.store)
-        .environmentObject(networkMonitor)
     }
     .modelContext(self.modelContext)
   }
