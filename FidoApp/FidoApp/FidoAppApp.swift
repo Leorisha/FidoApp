@@ -18,7 +18,7 @@ struct FidoAppApp: App {
 
     var body: some Scene {
         WindowGroup {
-          TabBreedView(store: FidoAppApp.store)
+          BreedTabView(store: FidoAppApp.store)
         }
     }
 }

@@ -8,7 +8,7 @@
 import SwiftUI
 import ComposableArchitecture
 
-struct TabBreedView: View {
+struct BreedTabView: View {
 
   var store: StoreOf<TabBreedFeature>
 
@@ -17,7 +17,7 @@ struct TabBreedView: View {
         TabView {
           BreedListView(store: store.scope(state: \.breedList, action: \.breedListActions))
             .tabItem { Text("Breeds") }
-          SearchBreedView()
+          BreedSearchView(store: store.scope(state: \.breedSearch, action: \.breedSearchActions))
             .tabItem { Text("Search") }
         }
       }
@@ -25,7 +25,7 @@ struct TabBreedView: View {
 }
 
 #Preview {
-  TabBreedView(store: Store(initialState: TabBreedFeature.State()){
+  BreedTabView(store: Store(initialState: TabBreedFeature.State()){
     TabBreedFeature()
   })
 }
