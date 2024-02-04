@@ -64,7 +64,7 @@ struct BreedSearchFeature {
         state.dataLoadingStatus = .success
         state.searchResults = breeds
         return .none
-      case .searchResultsResponse(.failure(let error)):
+      case .searchResultsResponse(.failure(_)):
         state.dataLoadingStatus = .error
         return .none
       case .path:

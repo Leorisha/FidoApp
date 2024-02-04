@@ -6,19 +6,32 @@
 //
 
 import SwiftUI
+import SwiftData
 import ComposableArchitecture
 
 @main
 struct FidoAppApp: App {
+
+  @Dependency(\.databaseService) var databaseService
+  var modelContext: ModelContext {
+    guard let modelContext = try? self.databaseService.context() else {
+      fatalError("Could not find modelcontext")
+    }
+    return modelContext
+  }
 
   static let store = Store(initialState: TabBreedFeature.State()) {
     TabBreedFeature()
       ._printChanges()
   }
 
-    var body: some Scene {
-        WindowGroup {
-          BreedTabView(store: FidoAppApp.store)
-        }
+  @StateObject var networkMonitor = NetworkMonitor()
+
+  var body: some Scene {
+    WindowGroup {
+      BreedTabView(store: FidoAppApp.store)
+        .environmentObject(networkMonitor)
     }
+    .modelContext(self.modelContext)
+  }
 }

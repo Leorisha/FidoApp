@@ -11,11 +11,14 @@ import ComposableArchitecture
 struct BreedListView: View {
 
   @Bindable var store: StoreOf<BreedListFeature>
+  @EnvironmentObject var networkMonitor: NetworkMonitor
 
   var body: some View {
     NavigationStack(path: $store.scope(state: \.path, action: \.path)) {
       VStack {
+        
         self.pickerView()
+
         Group {
           if store.selectedView == .list {
             self.listView()
@@ -24,21 +27,22 @@ struct BreedListView: View {
           }
         }
         
-        if store.isLoading {
-          ProgressView()
-        } else if store.shouldShowError {
-          VStack {
-            Text("Error occurred")
-            Button("Retry") {
-              store.send(.retry)
+        if networkMonitor.isConnected {
+          if store.isLoading {
+            ProgressView()
+          } else if store.shouldShowError {
+            VStack {
+              Text("Error occurred")
+              Button("Retry") {
+                store.send(.retry)
+              }
+            }
+          } else {
+            Button("Load More") {
+              store.send(.loadMore)
             }
           }
-        } else {
-          Button("Load More") {
-            store.send(.loadMore)
-          }
         }
-
       }
       .navigationTitle("Breeds")
     }
@@ -46,7 +50,9 @@ struct BreedListView: View {
     BreedDetailView(store: store)
   }
   .onAppear() {
-    if store.breeds.isEmpty {
+    store.send(.fetchOfflineBreeds)
+
+    if store.breeds.isEmpty && networkMonitor.isConnected {
       store.send(.fetchBreeds(page: store.currentPage, limit: store.itemsPerPage))
     }
   }
@@ -64,7 +70,7 @@ struct BreedListView: View {
 
   private func listView()-> some View {
     return ScrollView {
-      ForEach(store.breeds.prefix(store.currentPage * store.itemsPerPage), id: \.self) { breed in
+      ForEach(store.breeds, id: \.self) { breed in
         NavigationLink(state: BreedDetailFeature.State(breed: breed)){
           self.tableViewCell(for: breed)
             .padding()
@@ -78,7 +84,7 @@ struct BreedListView: View {
 
     return ScrollView{
       LazyVGrid(columns: columns, spacing: 16) {
-        ForEach(store.breeds.prefix(store.currentPage * store.itemsPerPage), id: \.self) { breed in
+        ForEach(store.breeds, id: \.self) { breed in
           NavigationLink(state: BreedDetailFeature.State(breed: breed)){
             gridCell(for: breed)
           }

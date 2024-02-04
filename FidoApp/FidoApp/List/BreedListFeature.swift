@@ -6,11 +6,17 @@
 //
 
 import Foundation
+import SwiftUI
 import ComposableArchitecture
 
 @Reducer
 struct BreedListFeature {
   @Dependency(\.fetchBreeds) var dogAPI
+
+  @Dependency(\.swiftData) var context
+  @Dependency(\.databaseService) var databaseService
+
+  @EnvironmentObject var networkMonitor: NetworkMonitor
 
   @ObservableState
   struct State: Equatable {
@@ -29,14 +35,18 @@ struct BreedListFeature {
     var isLoading: Bool {
       dataLoadingStatus == .loading
     }
+
+    var isOnline: Bool = false
   }
 
   enum Action {
     case fetchBreeds(page: Int, limit: Int)
+    case fetchOfflineBreeds
     case fetchBreedsResponse(Result<[Breed], Error>)
     case setSelection(ViewType)
     case loadMore
     case retry
+    case updateOnline(value: Bool)
     case path(StackAction<BreedDetailFeature.State, BreedDetailFeature.Action>)
   }
 
@@ -44,6 +54,7 @@ struct BreedListFeature {
     Reduce { state, action in
       switch action {
       case .fetchBreeds(let page, let limit):
+        
         if state.dataLoadingStatus == .loading {
           return .none
         }
@@ -63,10 +74,22 @@ struct BreedListFeature {
         }
       case .fetchBreedsResponse(.success(let breeds)):
         state.dataLoadingStatus = .success
-        state.breeds += breeds
+
+        let newBreeds = breeds.filter { b in
+          return !state.breeds.contains(b)
+        }
+
+        state.breeds += newBreeds
+
+        try? context.add(newBreeds)
+
         return .none
-      case .fetchBreedsResponse(.failure(let error)):
+      case .fetchBreedsResponse(.failure(_)):
         state.dataLoadingStatus = .error
+        return .none
+      case .fetchOfflineBreeds:
+        state.breeds = try! context.fetchAll()
+        print(state.breeds)
         return .none
       case .setSelection(let viewType):
         state.selectedView = viewType
@@ -78,6 +101,13 @@ struct BreedListFeature {
         return .send(.fetchBreeds(page: state.currentPage, limit: state.itemsPerPage))
       case .path:
         return .none
+      case .updateOnline(let newValue):
+        state.isOnline = networkMonitor.isConnected || newValue
+        if state.isOnline {
+          return .none
+        } else {
+          return .send(.fetchOfflineBreeds)
+        }
       }
     }
     .forEach(\.path, action: \.path) {

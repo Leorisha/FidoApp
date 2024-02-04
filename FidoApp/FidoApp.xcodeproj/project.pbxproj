@@ -18,6 +18,9 @@
 		C295BFF62B6FB82E00154169 /* BreedDetailFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C295BFF52B6FB82E00154169 /* BreedDetailFeature.swift */; };
 		C2C7B5292B6FEB340081AFE0 /* DogAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2C7B5282B6FEB340081AFE0 /* DogAPI.swift */; };
 		C2C7B52E2B6FFB370081AFE0 /* DataLoadingStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2C7B52D2B6FFB370081AFE0 /* DataLoadingStatus.swift */; };
+		C2C7B5342B7003830081AFE0 /* NetworkMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2C7B5332B7003830081AFE0 /* NetworkMonitor.swift */; };
+		C2C7B5372B7007500081AFE0 /* Database.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2C7B5362B7007500081AFE0 /* Database.swift */; };
+		C2C7B5392B70078A0081AFE0 /* BreedDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2C7B5382B70078A0081AFE0 /* BreedDatabase.swift */; };
 		C2E8C7AE2B6E9251003DE1AE /* FidoAppApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2E8C7AD2B6E9251003DE1AE /* FidoAppApp.swift */; };
 		C2E8C7B22B6E9253003DE1AE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C2E8C7B12B6E9253003DE1AE /* Assets.xcassets */; };
 		C2E8C7B52B6E9253003DE1AE /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C2E8C7B42B6E9253003DE1AE /* Preview Assets.xcassets */; };
@@ -56,6 +59,9 @@
 		C295BFF52B6FB82E00154169 /* BreedDetailFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreedDetailFeature.swift; sourceTree = "<group>"; };
 		C2C7B5282B6FEB340081AFE0 /* DogAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DogAPI.swift; sourceTree = "<group>"; };
 		C2C7B52D2B6FFB370081AFE0 /* DataLoadingStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataLoadingStatus.swift; sourceTree = "<group>"; };
+		C2C7B5332B7003830081AFE0 /* NetworkMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkMonitor.swift; sourceTree = "<group>"; };
+		C2C7B5362B7007500081AFE0 /* Database.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Database.swift; sourceTree = "<group>"; };
+		C2C7B5382B70078A0081AFE0 /* BreedDatabase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreedDatabase.swift; sourceTree = "<group>"; };
 		C2E8C7AA2B6E9251003DE1AE /* FidoApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FidoApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C2E8C7AD2B6E9251003DE1AE /* FidoAppApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FidoAppApp.swift; sourceTree = "<group>"; };
 		C2E8C7B12B6E9253003DE1AE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -142,8 +148,18 @@
 			children = (
 				C2C7B5282B6FEB340081AFE0 /* DogAPI.swift */,
 				C2C7B52D2B6FFB370081AFE0 /* DataLoadingStatus.swift */,
+				C2C7B5332B7003830081AFE0 /* NetworkMonitor.swift */,
 			);
 			path = Network;
+			sourceTree = "<group>";
+		};
+		C2C7B5352B70073B0081AFE0 /* Database */ = {
+			isa = PBXGroup;
+			children = (
+				C2C7B5362B7007500081AFE0 /* Database.swift */,
+				C2C7B5382B70078A0081AFE0 /* BreedDatabase.swift */,
+			);
+			path = Database;
 			sourceTree = "<group>";
 		};
 		C2E8C7A12B6E9251003DE1AE = {
@@ -169,6 +185,7 @@
 		C2E8C7AC2B6E9251003DE1AE /* FidoApp */ = {
 			isa = PBXGroup;
 			children = (
+				C2C7B5352B70073B0081AFE0 /* Database */,
 				C2C7B5252B6FE4130081AFE0 /* Network */,
 				C232033D2B6EB12300645D8F /* Models */,
 				C23203472B6EE4A500645D8F /* Tab */,
@@ -352,8 +369,11 @@
 				C232034E2B6EE52700645D8F /* TabBreedView.swift in Sources */,
 				C232034A2B6EE50400645D8F /* BreedSearchFeature.swift in Sources */,
 				C2E8C7AE2B6E9251003DE1AE /* FidoAppApp.swift in Sources */,
+				C2C7B5342B7003830081AFE0 /* NetworkMonitor.swift in Sources */,
+				C2C7B5392B70078A0081AFE0 /* BreedDatabase.swift in Sources */,
 				C295BFF42B6FB82000154169 /* BreedDetailView.swift in Sources */,
 				C2C7B52E2B6FFB370081AFE0 /* DataLoadingStatus.swift in Sources */,
+				C2C7B5372B7007500081AFE0 /* Database.swift in Sources */,
 				C295BFE62B6EF5BE00154169 /* BreedListView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -8,8 +8,9 @@
 import Foundation
 import SwiftData
 
-struct Breed: Equatable, Decodable, Hashable {
-  var id: Int
+@Model
+class Breed: Codable, Equatable, Identifiable, Hashable {
+  @Attribute(.unique) var id: Int
   var name: String
   var group: String?
   var origin: String?
@@ -37,15 +38,29 @@ struct Breed: Equatable, Decodable, Hashable {
     self.imageUrl = imageUrl
   }
 
-  init(from decoder: Decoder) throws {
+  required convenience init(from decoder: Decoder) throws {
     let container = try decoder.container(keyedBy: CodingKeys.self)
-    id = try container.decode(Int.self, forKey: .id)
-    name = try container.decode(String.self, forKey: .name)
-    group = try? container.decode(String.self, forKey: .group)
-    category = try? container.decode(String.self, forKey: .category)
-    temperament = try? container.decode(String.self, forKey: .temperament)
+    let id = try container.decode(Int.self, forKey: .id)
+    let name = try container.decode(String.self, forKey: .name)
+    let group = try? container.decode(String.self, forKey: .group)
+    let category = try? container.decode(String.self, forKey: .category)
+    let temperament = try? container.decode(String.self, forKey: .temperament)
     let reference = try container.decode(String.self, forKey: .imageUrl)
-    imageUrl = "https://cdn2.thedogapi.com/images/\(reference).jpg"  }
+    let imageUrl = "https://cdn2.thedogapi.com/images/\(reference).jpg"
+
+    self.init(id: id, name: name, group: group, category: category, origin: nil, temperament: temperament, imageUrl: imageUrl)
+  }
+
+  func encode(to encoder: Encoder) throws {
+    var container = encoder.container(keyedBy: CodingKeys.self)
+    try container.encode(id, forKey: .id)
+    try container.encode(name, forKey: .name)
+    try container.encode(group, forKey: .group)
+    try container.encode(category, forKey: .category)
+    try container.encode(temperament, forKey: .temperament)
+    let reference = imageUrl.components(separatedBy: "/").last?.replacingOccurrences(of: ".jpg", with: "")
+    try container.encode(reference, forKey: .imageUrl)
+  }
 
   static func mock() -> Breed {
     return Breed(
