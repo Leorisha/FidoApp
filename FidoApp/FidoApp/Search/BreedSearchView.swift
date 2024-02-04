@@ -15,10 +15,11 @@ struct BreedSearchView: View {
     NavigationStack(path: $store.scope(state: \.path, action: \.path)) {
       VStack {
         self.searchBar()
-
-        Spacer()
-        listView()
-
+        if store.searchResults.isEmpty {
+          ContentUnavailableView.search
+        } else {
+          listView()
+        }
       }
       .navigationTitle("Search")
     }
