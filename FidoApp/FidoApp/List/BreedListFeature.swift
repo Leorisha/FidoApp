@@ -21,7 +21,7 @@ struct BreedListFeature {
     var dataLoadingStatus = DataLoadingStatus.notStarted
     var breeds: [Breed] = []
     var displayingBreeds: [Breed] = []
-    var currentPage = 0
+    var currentPage = 1
     var itemsPerPage = 10
     var totalPages = 1
     var selectedView: ViewType = .list
@@ -104,17 +104,17 @@ struct BreedListFeature {
       case .path:
         return .none
       case .plusPage:
-        if state.currentPage + 1 <= state.totalPages {
+        if state.currentPage <= state.totalPages {
           state.currentPage += 1
         }
         return .send(.filterBreeds)
       case .minusPage:
-        if state.currentPage - 1 > 0 {
+        if state.currentPage > 0 {
           state.currentPage -= 1
         }
         return .send(.filterBreeds)
       case .filterBreeds:
-        let startIndex = state.currentPage * state.itemsPerPage
+        let startIndex = (state.currentPage - 1) * state.itemsPerPage
         var endIndex = startIndex + state.itemsPerPage
         endIndex = endIndex > state.breeds.count ? state.breeds.count : endIndex
         state.displayingBreeds = Array(state.breeds[startIndex..<endIndex])
