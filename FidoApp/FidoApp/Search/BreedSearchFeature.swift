@@ -11,19 +11,35 @@ import ComposableArchitecture
 @Reducer
 struct BreedSearchFeature {
 
+  @Dependency(\.fetchBreeds) var dogAPI
+  @Dependency(\.swiftData) var context
+  @Dependency(\.databaseService) var databaseService
+  
   @ObservableState
   struct State: Equatable {
+    var dataLoadingStatus = DataLoadingStatus.notStarted
     var searchText: String = ""
+    var allBreeds: [Breed] = []
     var searchResults: [Breed] = []
     var path = StackState<BreedDetailFeature.State>()
+    
+    var shouldShowError: Bool {
+      dataLoadingStatus == .error
+    }
 
+    var isLoading: Bool {
+      dataLoadingStatus == .loading
+    }
   }
 
   enum Action {
     case updateText(_ text: String)
     case performSearch(_ text: String)
-    case searchResultsResponse(_ :[Breed])
     case path(StackAction<BreedDetailFeature.State, BreedDetailFeature.Action>)
+    case retry
+    case fetchOfflineBreeds
+    case fetchBreeds
+    case fetchBreedsResponse(Result<[Breed], Error>)
   }
 
   var body: some ReducerOf<Self> {
@@ -33,27 +49,60 @@ struct BreedSearchFeature {
         state.searchText = text
         return .none
       case .performSearch(let text):
-        return .run { send in
-          print("https://api.thedogapi.com/v1/breeds/search?name=\(text)")
-          let (data, _) = try await URLSession.shared
-            .data(from: URL(string: "https://api.thedogapi.com/v1/breeds/search?q=\(text)")!)
-
-          // Convert data to string for printing
-             if let dataString = String(data: data, encoding: .utf8) {
-                 print("Received Data as String:\n\(dataString)")
-             } else {
-                 print("Unable to convert data to string.")
-             }
-
-          let breeds = try JSONDecoder().decode([Breed].self, from: data)
-
-          await send(.searchResultsResponse(breeds))
+        if state.dataLoadingStatus == .loading {
+          return .none
         }
-      case .searchResultsResponse(let breeds):
-        state.searchResults = breeds
+
+        state.dataLoadingStatus = .loading
+
+        state.searchResults = state.allBreeds.filter{ breed in
+          return breed.name.lowercased().contains(text.lowercased())
+        }
+
+        print(state.searchResults)
+        state.dataLoadingStatus = .success
+
         return .none
+      case .fetchBreeds:
+
+        if state.dataLoadingStatus == .loading {
+          return .none
+        }
+
+        state.dataLoadingStatus = .loading
+
+        return .run { send in
+          do {
+            let breeds = try await self.dogAPI.fetchBreeds()
+            let result: Result<[Breed], Error> = .success(breeds)
+            await send(.fetchBreedsResponse(result))
+          } catch {
+            let result: Result<[Breed], Error> = .failure(error)
+            await send(.fetchBreedsResponse(result))
+          }
+        }
+      case .fetchBreedsResponse(.success(let breeds)):
+        state.dataLoadingStatus = .success
+
+        state.allBreeds += breeds
+
+        try? context.add(breeds)
+
+        return .none
+      case .fetchBreedsResponse(.failure(_)):
+        state.dataLoadingStatus = .error
+        return .none
+      case .fetchOfflineBreeds:
+        state.allBreeds = try! context.fetchAll()
+        if state.allBreeds.isEmpty {
+          return .send(.fetchBreeds)
+        } else {
+          return .none
+        }
       case .path:
         return .none
+      case .retry:
+        return .send(.performSearch(state.searchText))
       }
     }
     .forEach(\.path, action: \.path) {

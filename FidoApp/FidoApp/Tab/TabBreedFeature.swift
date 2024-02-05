@@ -25,7 +25,7 @@ struct TabBreedFeature {
   var body: some ReducerOf<Self> {
     Scope(state: \.breedList, action: \.breedListActions) {
       BreedListFeature()
-         }
+    }
     Scope(state: \.breedSearch, action: \.breedSearchActions) {
       BreedSearchFeature()
     }

@@ -16,7 +16,7 @@ struct BreedTabView: View {
       VStack {
         TabView {
           BreedListView(store: store.scope(state: \.breedList, action: \.breedListActions))
-            .tabItem { Text("Breeds") }
+            .tabItem { Text("Breeds")}
           BreedSearchView(store: store.scope(state: \.breedSearch, action: \.breedSearchActions))
             .tabItem { Text("Search") }
         }

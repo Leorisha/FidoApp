@@ -9,16 +9,40 @@ import SwiftUI
 import ComposableArchitecture
 
 struct BreedSearchView: View {
+
   @Bindable var store: StoreOf<BreedSearchFeature>
+  @FocusState private var searchIsFocused: Bool
 
   var body: some View {
     NavigationStack(path: $store.scope(state: \.path, action: \.path)) {
       VStack {
         self.searchBar()
         if store.searchResults.isEmpty {
-          ContentUnavailableView.search
+          if store.isLoading {
+            VStack {
+              Spacer()
+              ProgressView()
+              Spacer()
+            }
+          } else if store.shouldShowError {
+            VStack {
+              Spacer()
+              Text("Error occurred")
+              Button("Retry") {
+                store.send(.retry)
+              }
+            }
+          } else {
+            ContentUnavailableView.search
+          }
+
         } else {
           listView()
+        }
+      }
+      .onAppear() {
+        if store.allBreeds.isEmpty {
+          store.send(.fetchOfflineBreeds)
         }
       }
       .navigationTitle("Search")
@@ -32,6 +56,7 @@ struct BreedSearchView: View {
     return HStack {
       TextField("Search for a breed name", text: $store.searchText.sending(\.updateText), onCommit: searchAction)
         .textFieldStyle(RoundedBorderTextFieldStyle())
+        .focused($searchIsFocused)
         .padding(.horizontal)
 
       Button(action: searchAction) {
@@ -76,6 +101,7 @@ struct BreedSearchView: View {
   }
 
   private func searchAction() {
+    searchIsFocused = false
     store.send(.performSearch(store.searchText))
   }
 }

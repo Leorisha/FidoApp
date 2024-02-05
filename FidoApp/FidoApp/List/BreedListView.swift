@@ -15,7 +15,9 @@ struct BreedListView: View {
   var body: some View {
     NavigationStack(path: $store.scope(state: \.path, action: \.path)) {
       VStack {
+
         self.pickerView()
+
         Group {
           if store.selectedView == .list {
             self.listView()
@@ -23,9 +25,28 @@ struct BreedListView: View {
             self.gridView()
           }
         }
-        Button("Load More") {
-          store.send(.loadMore)
+
+        if store.isLoading {
+          ProgressView()
+        } else if store.shouldShowError {
+          VStack {
+            Text("Error occurred")
+            Button("Retry") {
+              store.send(.retry)
+            }
+          }
+        } else {
+          HStack {
+            Button("-") {
+              store.send(.minusPage)
+            }
+            Text("\(store.currentPage) / \(store.totalPages)")
+            Button("+") {
+              store.send(.plusPage)
+            }
+           }
         }
+
       }
       .navigationTitle("Breeds")
     }
@@ -33,7 +54,9 @@ struct BreedListView: View {
     BreedDetailView(store: store)
   }
   .onAppear() {
-    store.send(.fetchBreeds(page: store.currentPage, limit: store.itemsPerPage))
+    if store.breeds.isEmpty {
+      store.send(.fetchOfflineBreeds)
+    }
   }
   }
 
@@ -49,7 +72,7 @@ struct BreedListView: View {
 
   private func listView()-> some View {
     return ScrollView {
-      ForEach(store.breeds.prefix(store.currentPage * store.itemsPerPage), id: \.self) { breed in
+      ForEach(store.displayingBreeds, id: \.self) { breed in
         NavigationLink(state: BreedDetailFeature.State(breed: breed)){
           self.tableViewCell(for: breed)
             .padding()
@@ -63,7 +86,7 @@ struct BreedListView: View {
 
     return ScrollView{
       LazyVGrid(columns: columns, spacing: 16) {
-        ForEach(store.breeds.prefix(store.currentPage * store.itemsPerPage), id: \.self) { breed in
+        ForEach(store.displayingBreeds, id: \.self) { breed in
           NavigationLink(state: BreedDetailFeature.State(breed: breed)){
             gridCell(for: breed)
           }
@@ -75,21 +98,8 @@ struct BreedListView: View {
 
   private func tableViewCell(for breed: Breed) -> some View {
     return HStack {
-      AsyncImage(url: URL(string: breed.imageUrl)) { phase in
-        switch phase {
-        case .empty:
-          ProgressView()
-        case .success(let image):
-          image
-            .resizable()
-            .aspectRatio(contentMode: .fit)
-        case .failure:
-          Text("Failed to load image")
-        @unknown default:
-          EmptyView()
-        }
-      }
-      .frame(width: 100, height: 100)
+      CachedImageView(imageUrl: URL(string: breed.imageUrl))
+      .frame(maxWidth: 100, maxHeight: 100)
       Text(breed.name)
       Spacer()
     }
@@ -98,21 +108,8 @@ struct BreedListView: View {
 
   private func gridCell(for breed: Breed) -> some View {
     return VStack {
-      AsyncImage(url: URL(string: breed.imageUrl)) { phase in
-        switch phase {
-        case .empty:
-          ProgressView()
-        case .success(let image):
-          image
-            .resizable()
-            .aspectRatio(contentMode: .fit)
-        case .failure:
-          Text("Failed to load image")
-        @unknown default:
-          EmptyView()
-        }
-      }
-      .frame(width: 100, height: 100)
+      CachedImageView(imageUrl: URL(string: breed.imageUrl))
+      .frame(maxWidth: 100, maxHeight: 100)
       Text(breed.name)
         .multilineTextAlignment(.center)
         .padding()
