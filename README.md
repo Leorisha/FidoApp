@@ -4,7 +4,7 @@ The is an iOS App Exercise.
 **Aditional considerations:**
 
 I decided to try and use TCA (The Composable Architecture) while building this project since I've recently added some React Development to my development
-experience and I had read online that it was a good approach to use with SwiftUI and to keep thing organized. 
+experience and I had read online that it was a good approach to use with SwiftUI and keep thing organized similarly to Redux. 
 
 It was quite a challenge since the documentation and examples online are sometimes not "exactly" what you maybe looking for, outdated or behind a paywall. Overall I consider a nice architecture but not so good for unit testing as they say, or at least I found it had some wierd behaviors.
 I also, opted for SwiftData for offline capabilities for its simplicity.
