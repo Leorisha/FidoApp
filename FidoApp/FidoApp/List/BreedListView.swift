@@ -40,7 +40,7 @@ struct BreedListView: View {
             Button("-") {
               store.send(.minusPage)
             }
-            Text("\(store.currentPage) / \(store.totalPages)")
+            Text("\(store.currentPage + 1) / \(store.totalPages)")
             Button("+") {
               store.send(.plusPage)
             }

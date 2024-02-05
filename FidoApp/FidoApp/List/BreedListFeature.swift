@@ -21,7 +21,7 @@ struct BreedListFeature {
     var dataLoadingStatus = DataLoadingStatus.notStarted
     var breeds: [Breed] = []
     var displayingBreeds: [Breed] = []
-    var currentPage = 1
+    var currentPage = 0
     var itemsPerPage = 10
     var totalPages = 1
     var selectedView: ViewType = .list
@@ -79,8 +79,8 @@ struct BreedListFeature {
         }
 
         state.breeds += newBreeds
-        state.totalPages = state.breeds.count / state.itemsPerPage
-        
+        state.totalPages = Int(ceil(Double(state.breeds.count) / Double(state.itemsPerPage)))
+
         try? context.add(newBreeds)
 
         return .send(.filterBreeds)
@@ -92,7 +92,8 @@ struct BreedListFeature {
         if state.breeds.isEmpty {
           return .send(.fetchBreeds)
         } else {
-          state.totalPages = state.breeds.count / state.itemsPerPage
+          state.totalPages = Int(ceil(Double(state.breeds.count) / Double(state.itemsPerPage)))
+
           return .send(.filterBreeds)
         }
       case .setSelection(let viewType):
@@ -114,7 +115,8 @@ struct BreedListFeature {
         return .send(.filterBreeds)
       case .filterBreeds:
         let startIndex = state.currentPage * state.itemsPerPage
-        let endIndex = startIndex + state.itemsPerPage
+        var endIndex = startIndex + state.itemsPerPage
+        endIndex = endIndex > state.breeds.count ? state.breeds.count : endIndex
         state.displayingBreeds = Array(state.breeds[startIndex..<endIndex])
         return .none
       }

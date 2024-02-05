@@ -35,12 +35,7 @@ extension BreedDatabase: DependencyKey {
                 let breedContext = try context()
 
                 let descriptor = FetchDescriptor<Breed>(sortBy: [SortDescriptor(\.name)])
-                let values = try breedContext.fetch(descriptor)
-
-              for value in values {
-                print("DB \(value.name)")
-              }
-                return values
+                return try breedContext.fetch(descriptor)
             } catch {
                 return []
             }
@@ -60,7 +55,6 @@ extension BreedDatabase: DependencyKey {
                 let breedContext = try context()
 
               for model in models {
-                print("DB INSERT \(model.name)")
                 breedContext.insert(model)
               }
 

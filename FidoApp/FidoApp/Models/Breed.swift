@@ -10,7 +10,7 @@ import SwiftData
 
 @Model
 class Breed: Codable, Equatable, Identifiable, Hashable {
-  @Attribute(.unique) var id: Int
+  var id: Int
   var name: String
   var group: String?
   var origin: String?
@@ -60,6 +60,16 @@ class Breed: Codable, Equatable, Identifiable, Hashable {
     try container.encode(temperament, forKey: .temperament)
     let reference = imageUrl.components(separatedBy: "/").last?.replacingOccurrences(of: ".jpg", with: "")
     try container.encode(reference, forKey: .imageUrl)
+  }
+
+  static func ==(lhs: Breed, rhs: Breed) -> Bool {
+    return lhs.id == rhs.id &&
+           lhs.name == rhs.name &&
+           lhs.group == rhs.group &&
+           lhs.origin == rhs.origin &&
+           lhs.category == rhs.category &&
+           lhs.temperament == rhs.temperament &&
+           lhs.imageUrl == rhs.imageUrl
   }
 
   static func mock() -> Breed {
