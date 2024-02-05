@@ -23,7 +23,7 @@ class Breed: Codable, Equatable, Identifiable, Hashable {
     case name
     case group = "breed_group"
     case category = "bred_for"
-    case origin = "country_code"
+    case origin
     case temperament
     case imageUrl = "reference_image_id"
   }
@@ -43,12 +43,13 @@ class Breed: Codable, Equatable, Identifiable, Hashable {
     let id = try container.decode(Int.self, forKey: .id)
     let name = try container.decode(String.self, forKey: .name)
     let group = try? container.decode(String.self, forKey: .group)
+    let origin = try? container.decode(String.self, forKey: .origin)
     let category = try? container.decode(String.self, forKey: .category)
     let temperament = try? container.decode(String.self, forKey: .temperament)
     let reference = try container.decode(String.self, forKey: .imageUrl)
     let imageUrl = "https://cdn2.thedogapi.com/images/\(reference).jpg"
 
-    self.init(id: id, name: name, group: group, category: category, origin: nil, temperament: temperament, imageUrl: imageUrl)
+    self.init(id: id, name: name, group: group, category: category, origin: origin, temperament: temperament, imageUrl: imageUrl)
   }
 
   func encode(to encoder: Encoder) throws {
@@ -56,6 +57,7 @@ class Breed: Codable, Equatable, Identifiable, Hashable {
     try container.encode(id, forKey: .id)
     try container.encode(name, forKey: .name)
     try container.encode(group, forKey: .group)
+    try container.encode(origin, forKey: .origin)
     try container.encode(category, forKey: .category)
     try container.encode(temperament, forKey: .temperament)
     let reference = imageUrl.components(separatedBy: "/").last?.replacingOccurrences(of: ".jpg", with: "")
